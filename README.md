@@ -6,12 +6,12 @@
 
 # 原理
 
-经检查是由于`CxRobotSdkJs.js`相关部分代码启动的AI助教，因此可以直接禁止此JS文件加载。此外由于AI助教会尝试获取麦克风权限以实现对话功能，同时将VoiceToonBot.js禁止加载。
+经检查是由于`CxRobotSdkJs.js`相关部分代码启动的AI助教，因此可以直接禁止此JS文件加载。此外由于AI助教会尝试获取麦克风权限以实现对话功能，同时将`VoiceToonBot.js`禁止加载。
 
 # 实现
 
 基于以上原理，有两种方法可实现此功能：
-1. 阻止相关HTTP请求和WebSocket连接
+1. **阻止相关HTTP请求和WebSocket连接**
 ```javascript
     // 拦截并阻止特定URL的HTTP请求
     var originalOpen = XMLHttpRequest.prototype.open;
@@ -39,7 +39,7 @@
         return new originalWebSocket(url, protocols);
     };
 ```
-2. 禁止JS加载
+2. **禁止JS加载**
 ```javascript
     // 拦截并阻止特定的 JavaScript 文件加载
     var observer = new MutationObserver(function(mutations) {
