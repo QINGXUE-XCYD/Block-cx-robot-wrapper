@@ -68,112 +68,112 @@
     - 复制以下脚本代码，并粘贴到编辑器中：
 
     ```javascript
-// ==UserScript==
-// @name         【SB超星AI助教】Block cx-robot-wrapper
-// @namespace    http://tampermonkey.net/
-// @version      0.1
-// @description  Remove cx-robot-wrapper and its audio
-// @author       bili_下次一定的卡坦精
-// @match        *://*.chaoxing.com/*
-// @icon         https://www.google.com/s2/favicons?sz=64&domain=chaoxing.com
-// @grant        none
-// @run-at       document-start
-// ==/UserScript==
-
-(function() {
-    'use strict';
-
-    // 拦截并阻止特定的 JavaScript 文件加载
-    var observer = new MutationObserver(function(mutations) {
-        mutations.forEach(function(mutation) {
-            var nodes = Array.from(mutation.addedNodes);
-            for (var node of nodes) {
-                if (node.nodeType === 1 && node.tagName === 'SCRIPT' && node.src) {
-                    if (node.src.includes('CxRobotSdkJs.js') || node.src.includes('VoiceToonBot.js')) {
-                        console.log('Blocked script:', node.src);
-                        node.parentNode.removeChild(node);
+        // ==UserScript==
+        // @name         【SB超星AI助教】Block cx-robot-wrapper
+        // @namespace    http://tampermonkey.net/
+        // @version      0.1
+        // @description  Remove cx-robot-wrapper and its audio
+        // @author       bili_下次一定的卡坦精
+        // @match        *://*.chaoxing.com/*
+        // @icon         https://www.google.com/s2/favicons?sz=64&domain=chaoxing.com
+        // @grant        none
+        // @run-at       document-start
+        // ==/UserScript==
+        
+        (function() {
+            'use strict';
+        
+            // 拦截并阻止特定的 JavaScript 文件加载
+            var observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    var nodes = Array.from(mutation.addedNodes);
+                    for (var node of nodes) {
+                        if (node.nodeType === 1 && node.tagName === 'SCRIPT' && node.src) {
+                            if (node.src.includes('CxRobotSdkJs.js') || node.src.includes('VoiceToonBot.js')) {
+                                console.log('Blocked script:', node.src);
+                                node.parentNode.removeChild(node);
+                            }
+                        }
                     }
-                }
+                });
+            });
+        
+            observer.observe(document.documentElement, { childList: true, subtree: true });
+        
+            // Remove the element immediately if it's already present
+            var element = document.querySelector('.cx-robot-wrapper');
+            if (element) {
+                element.remove();
             }
-        });
-    });
-
-    observer.observe(document.documentElement, { childList: true, subtree: true });
-
-    // Remove the element immediately if it's already present
-    var element = document.querySelector('.cx-robot-wrapper');
-    if (element) {
-        element.remove();
-    }
-
-})();
+        
+        })();
     ```
 
     - 点击“文件” -> “保存”以保存脚本。
     （此处使用的是第二种解决方法，禁止JS脚本启动）
     如果要使用第一种方法，请使用如下代码
 ```javascript
-// ==UserScript==
-// @name         【SB超星AI助教】Block cx-robot-wrapper
-// @namespace    http://tampermonkey.net/
-// @version      0.2
-// @description  Remove cx-robot-wrapper and its audio
-// @author       bili_下次一定的卡坦精
-// @match        *://*.chaoxing.com/*
-// @icon         https://www.google.com/s2/favicons?sz=64&domain=chaoxing.com
-// @grant        none
-// ==/UserScript==
-
-(function() {
-    'use strict';
-
-    // 拦截并阻止特定URL的HTTP请求
-    var originalOpen = XMLHttpRequest.prototype.open;
-    XMLHttpRequest.prototype.open = function() {
-        if (arguments[1].includes('https://robot-lc.chaoxing.com/sdk/CxRobotSdkJs.js') ||
-            arguments[1].includes('https://robot-lc.chaoxing.com/v1/api/getTTSWebSocketUrl')) {
-            console.log('Blocked:', arguments[1]);
-            return;
-        }
-        return originalOpen.apply(this, arguments);
-    };
-
-    // 拦截并阻止特定URL的WebSocket请求
-    var originalWebSocket = window.WebSocket;
-    window.WebSocket = function(url, protocols) {
-        if (url.includes('wss://tts-api.xfyun.cn/v2/tts')) {
-            console.log('Blocked WebSocket:', url);
-            // Return an object with a close method to prevent errors
-            return {
-                close: function() {},
-                addEventListener: function() {},
-                removeEventListener: function() {},
-                send: function() {},
-            };
-        }
-        return new originalWebSocket(url, protocols);
-    };
-
-    // Remove the element
-    var element = document.querySelector('.cx-robot-wrapper');
-    if (element) {
-        element.remove();
-    }
-
-    // Observe for future elements
-    var observer = new MutationObserver(function(mutations) {
-        mutations.forEach(function(mutation) {
-            var nodes = Array.from(mutation.addedNodes);
-            for (var node of nodes) {
-                if (node.nodeType === 1 && node.matches('.cx-robot-wrapper')) {
-                    node.remove();
+        // ==UserScript==
+        // @name         【SB超星AI助教】Block cx-robot-wrapper
+        // @namespace    http://tampermonkey.net/
+        // @version      0.2
+        // @description  Remove cx-robot-wrapper and its audio
+        // @author       bili_下次一定的卡坦精
+        // @match        *://*.chaoxing.com/*
+        // @icon         https://www.google.com/s2/favicons?sz=64&domain=chaoxing.com
+        // @grant        none
+        // ==/UserScript==
+        
+        (function() {
+            'use strict';
+        
+            // 拦截并阻止特定URL的HTTP请求
+            var originalOpen = XMLHttpRequest.prototype.open;
+            XMLHttpRequest.prototype.open = function() {
+                if (arguments[1].includes('https://robot-lc.chaoxing.com/sdk/CxRobotSdkJs.js') ||
+                    arguments[1].includes('https://robot-lc.chaoxing.com/v1/api/getTTSWebSocketUrl')) {
+                    console.log('Blocked:', arguments[1]);
+                    return;
                 }
+                return originalOpen.apply(this, arguments);
+            };
+        
+            // 拦截并阻止特定URL的WebSocket请求
+            var originalWebSocket = window.WebSocket;
+            window.WebSocket = function(url, protocols) {
+                if (url.includes('wss://tts-api.xfyun.cn/v2/tts')) {
+                    console.log('Blocked WebSocket:', url);
+                    // Return an object with a close method to prevent errors
+                    return {
+                        close: function() {},
+                        addEventListener: function() {},
+                        removeEventListener: function() {},
+                        send: function() {},
+                    };
+                }
+                return new originalWebSocket(url, protocols);
+            };
+        
+            // Remove the element
+            var element = document.querySelector('.cx-robot-wrapper');
+            if (element) {
+                element.remove();
             }
-        });
-    });
-
-    observer.observe(document.body, { childList: true, subtree: true });
-})();
+        
+            // Observe for future elements
+            var observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    var nodes = Array.from(mutation.addedNodes);
+                    for (var node of nodes) {
+                        if (node.nodeType === 1 && node.matches('.cx-robot-wrapper')) {
+                            node.remove();
+                        }
+                    }
+                });
+            });
+        
+            observer.observe(document.body, { childList: true, subtree: true });
+        })();
 ```
 ## 使用方法
 
