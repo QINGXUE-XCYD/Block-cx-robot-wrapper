@@ -66,7 +66,7 @@
 2. **安装脚本**
     - 点击Tampermonkey图标，选择“添加新脚本”。
     - 复制以下脚本代码，并粘贴到编辑器中：
-
+    v_0.3
     ```javascript
         // ==UserScript==
         // @name         【SB超星AI助教】Block cx-robot-wrapper
@@ -112,6 +112,7 @@
     - 点击“文件” -> “保存”以保存脚本。
     （此处使用的是第二种解决方法，禁止JS脚本启动）
     如果要使用第一种方法，请使用如下代码
+v_0.2
 ```javascript
         // ==UserScript==
         // @name         【SB超星AI助教】Block cx-robot-wrapper
